@@ -1,0 +1,12 @@
+<div style="display: flex; align-items: baseline;">
+  <h2 style="margin-right: 50px;">メモアプリ</h2>
+  <form method="get" action="/new">
+    <button type="submit">追加</button>
+  </form>
+</div>
+
+<% @json_data.each do |memo| %>
+  <% memo.each do |id, title_and_text| %>
+    <p>タイトル:<a href="/<%= id %>"><%= title_and_text['title'] %></a></p>
+  <% end %>
+<% end %>
