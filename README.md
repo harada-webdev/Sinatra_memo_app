@@ -9,7 +9,7 @@ Web上にタイトルとメモを書いて、簡単なメモを作成できま�
 
 ## インストール方法
 1. `git clone https://github.com/harada-webdev/Sinatra_memo_app.git`で、リポジトリをローカルの任意の場所にコピーします。
-2. sinatra_memo_appディレクトリに移動します。
+2. Sinatra_memo_appディレクトリに移動します。
 3. `git checkout dev`で、mainブランチからdevブランチに移動します。
 4. ローカルに、アプリケーションに必要なGemがインストールされていないので、`bundle install`で必要なGemをインストールします。
 5. `bundle exec ruby memo.rb`で、アプリケーションを起動させます。
