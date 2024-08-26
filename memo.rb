@@ -2,18 +2,28 @@
 
 require 'sinatra'
 require 'sinatra/reloader'
-require 'json'
-require 'securerandom'
 
-def read_json(file_path = 'data/memo.json')
+FILE_PATH = 'data/memo.json'
+
+helpers do
+  def h(input)
+    Rack::Utils.escape_html(input)
+  end
+end
+
+def read_json(file_path = FILE_PATH)
   JSON.parse(File.read(file_path))
 end
 
-def write_json(data, save_location = 'data/memo.json')
-  File.write(save_location, JSON.dump(data))
+def write_json(data, file_path = FILE_PATH)
+  File.write(file_path, JSON.dump(data))
 end
 
 get '/' do
+  redirect '/memos'
+end
+
+get '/memos' do
   @json_data = read_json
   erb :home
 end
@@ -24,47 +34,52 @@ end
 
 # メモの新規作成
 post '/memos' do
-  @json_data = read_json
-  @json_data << { SecureRandom.uuid => { 'title' => params[:title], 'text' => params[:text] } }
-  write_json(@json_data)
-  redirect '/'
+  json_data = read_json
+
+  json_data << { SecureRandom.uuid => { 'title' => h(params[:title]), 'text' => h(params[:text]) } }
+  write_json(json_data)
+
+  redirect '/memos'
 end
 
-get '/:id' do
+get '/memos/:id' do
   @id = params[:id]
   @json_data = read_json
+  @subject_to_memo = @json_data.find { |memo| memo.key?(@id) }
 
-  memo_exists = @json_data.any? { |memo| memo.key?(@id) }
-
-  if memo_exists
+  if @subject_to_memo
     erb :detail
   else
     erb :not_found
   end
 end
 
-not_found do
-  erb :not_found
+delete '/memos/:id' do
+  json_data = read_json
+
+  json_data.delete_if { |memo| memo.key?(params[:id]) }
+  write_json(json_data)
+
+  redirect '/memos'
 end
 
-delete '/:id' do
-  @json_data = read_json
-  @json_data.delete_if { |memo| memo.key?(params[:id]) }
-  write_json(@json_data)
-  redirect '/'
-end
-
-patch '/:id/edit' do
+get '/memos/:id/edit' do
   @id = params[:id]
   @json_data = read_json
+  @subject_to_memo = @json_data.find { |memo| memo.key?(@id) }
+
   erb :edit
 end
 
 # メモの更新
-post '/:id' do
-  @json_data = read_json
-  edit_memo = @json_data.find { |memo| memo.key?(params[:id]) }
-  edit_memo[params[:id]].update({ 'title' => params[:title], 'text' => params[:text] })
-  write_json(@json_data)
-  redirect '/'
+patch '/memos/:id' do
+  id = params[:id]
+  json_data = read_json
+  subject_to_memo = json_data.find { |memo| memo.key?(id) }
+
+  subject_to_memo[id]['title'] = h(params[:title])
+  subject_to_memo[id]['text'] = h(params[:text])
+  write_json(json_data)
+
+  redirect '/memos'
 end

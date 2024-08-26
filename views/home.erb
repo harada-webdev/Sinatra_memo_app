@@ -5,8 +5,13 @@
   </form>
 </div>
 
+<% memo_number = 1 %>
 <% @json_data.each do |memo| %>
   <% memo.each do |id, title_and_text| %>
-    <p>タイトル:<a href="/<%= id %>"><%= title_and_text['title'] %></a></p>
+    <p>
+      <span style="margin-right: 8px" label="memo"><b><%= memo_number %>.</b></span>
+      <span ><a href="/memos/<%= h(id) %>"><%= h(title_and_text['title']) %></a>
+    </p>
+    <% memo_number += 1 %>
   <% end %>
 <% end %>
