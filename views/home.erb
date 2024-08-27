@@ -10,7 +10,7 @@
   <% memo.each do |id, title_and_text| %>
     <p>
       <span style="margin-right: 8px" label="memo"><b><%= memo_number %>.</b></span>
-      <a href="/memos/<%= h(id) %>"><%= h(title_and_text['title']) %></a>
+      <a href="/memos/<%= hattr(id) %>"><%= h(title_and_text['title']) %></a>
     </p>
     <% memo_number += 1 %>
   <% end %>

@@ -9,6 +9,10 @@ helpers do
   def h(input)
     Rack::Utils.escape_html(input)
   end
+
+  def hattr(text)
+    Rack::Utils.escape_path(text)
+  end
 end
 
 def read_memos
@@ -36,7 +40,7 @@ end
 post '/memos' do
   memos = read_memos
 
-  memos << { SecureRandom.uuid => { 'title' => h(params[:title]), 'text' => h(params[:text]) } }
+  memos << { SecureRandom.uuid => { 'title' => params[:title], 'text' => params[:text] } }
   write_memos(memos)
 
   redirect '/memos'
