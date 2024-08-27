@@ -11,12 +11,12 @@ helpers do
   end
 end
 
-def read_json(file_path = FILE_PATH)
-  JSON.parse(File.read(file_path))
+def read_json
+  JSON.parse(File.read(FILE_PATH))
 end
 
-def write_json(data, file_path = FILE_PATH)
-  File.write(file_path, JSON.dump(data))
+def write_json(data)
+  File.write(FILE_PATH, JSON.dump(data))
 end
 
 get '/' do
