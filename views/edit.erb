@@ -6,11 +6,11 @@
 <input type="hidden" name="_method" value="patch">
 
   <label for="title"><b>タイトル</b></label><br>
-  <input name="title" id="title" value="<%= h(@memo[@id]['title']) %>"
+  <input name="title" id="title" value="<%= h(@memos[@id]['title']) %>"
   style="width: 250px" required><br><br>
 
   <label for="text"><b>メモ</b></label><br>
-  <input name="text" value="<%= h(@memo[@id]['text']) %>"
+  <input name="text" value="<%= h(@memos[@id]['text']) %>"
   style="width: 250px" required><br><br>
 
   <button type="submit">変更</button>

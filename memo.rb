@@ -40,7 +40,7 @@ end
 post '/memos' do
   memos = read_memos
 
-  memos << { SecureRandom.uuid => { 'title' => params[:title], 'text' => params[:text] } }
+  memos[SecureRandom.uuid] = { 'title' => params[:title], 'text' => params[:text] }
   write_memos(memos)
 
   redirect '/memos'
@@ -49,9 +49,8 @@ end
 get '/memos/:id' do
   @id = params[:id]
   @memos = read_memos
-  @memo = @memos.find { |memo| memo.key?(@id) }
 
-  if @memo
+  if @memos
     erb :detail
   else
     erb :not_found
@@ -61,7 +60,7 @@ end
 delete '/memos/:id' do
   memos = read_memos
 
-  memos.delete_if { |memo| memo.key?(params[:id]) }
+  memos.delete(params[:id])
   write_memos(memos)
 
   redirect '/memos'
@@ -70,7 +69,6 @@ end
 get '/memos/:id/edit' do
   @id = params[:id]
   @memos = read_memos
-  @memo = @memos.find { |memo| memo.key?(@id) }
 
   erb :edit
 end
@@ -79,10 +77,8 @@ end
 patch '/memos/:id' do
   id = params[:id]
   memos = read_memos
-  memo = memos.find { |memo| memo.key?(id) }
 
-  memo[id]['title'] = h(params[:title])
-  memo[id]['text'] = h(params[:text])
+  memos[id].update('title' => h(params[:title]), 'text' => h(params[:text]))
   write_memos(memos)
 
   redirect '/memos'
