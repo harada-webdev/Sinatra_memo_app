@@ -2,12 +2,12 @@
 <p><a href="/memos">戻る</a></p>
 <p>
   <span style="margin-right: 16px"><b>タイトル:</b></span>
-  <%= h(@subject_to_memo[@id]['title']) %>
+  <%= h(@memo[@id]['title']) %>
 </p>
 
 <p>
   <span style="margin-right: 48px"><b>メモ:</b></span>
-  <%= h(@subject_to_memo[@id]['text']) %>
+  <%= h(@memo[@id]['text']) %>
 </p>
 
 <form method="get" action="/memos/<%= @id %>/edit" style="display: inline-block; margin-right: 20px;">

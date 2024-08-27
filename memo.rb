@@ -11,11 +11,11 @@ helpers do
   end
 end
 
-def read_json
+def read_memos
   JSON.parse(File.read(FILE_PATH))
 end
 
-def write_json(data)
+def write_memos(data)
   File.write(FILE_PATH, JSON.dump(data))
 end
 
@@ -24,7 +24,7 @@ get '/' do
 end
 
 get '/memos' do
-  @json_data = read_json
+  @memos = read_memos
   erb :home
 end
 
@@ -34,20 +34,20 @@ end
 
 # メモの新規作成
 post '/memos' do
-  json_data = read_json
+  memos = read_memos
 
-  json_data << { SecureRandom.uuid => { 'title' => h(params[:title]), 'text' => h(params[:text]) } }
-  write_json(json_data)
+  memos << { SecureRandom.uuid => { 'title' => h(params[:title]), 'text' => h(params[:text]) } }
+  write_memos(memos)
 
   redirect '/memos'
 end
 
 get '/memos/:id' do
   @id = params[:id]
-  @json_data = read_json
-  @subject_to_memo = @json_data.find { |memo| memo.key?(@id) }
+  @memos = read_memos
+  @memo = @memos.find { |memo| memo.key?(@id) }
 
-  if @subject_to_memo
+  if @memo
     erb :detail
   else
     erb :not_found
@@ -55,18 +55,18 @@ get '/memos/:id' do
 end
 
 delete '/memos/:id' do
-  json_data = read_json
+  memos = read_memos
 
-  json_data.delete_if { |memo| memo.key?(params[:id]) }
-  write_json(json_data)
+  memos.delete_if { |memo| memo.key?(params[:id]) }
+  write_memos(memos)
 
   redirect '/memos'
 end
 
 get '/memos/:id/edit' do
   @id = params[:id]
-  @json_data = read_json
-  @subject_to_memo = @json_data.find { |memo| memo.key?(@id) }
+  @memos = read_memos
+  @memo = @memos.find { |memo| memo.key?(@id) }
 
   erb :edit
 end
@@ -74,12 +74,12 @@ end
 # メモの更新
 patch '/memos/:id' do
   id = params[:id]
-  json_data = read_json
-  subject_to_memo = json_data.find { |memo| memo.key?(id) }
+  memos = read_memos
+  memo = memos.find { |memo| memo.key?(id) }
 
-  subject_to_memo[id]['title'] = h(params[:title])
-  subject_to_memo[id]['text'] = h(params[:text])
-  write_json(json_data)
+  memo[id]['title'] = h(params[:title])
+  memo[id]['text'] = h(params[:text])
+  write_memos(memos)
 
   redirect '/memos'
 end
