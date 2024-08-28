@@ -5,11 +5,9 @@
   </form>
 </div>
 
-<% memo_number = 1 %>
-<% @memos.each do |id, title_and_text| %>
+<% @memos.each_with_index do |(id, memo), index| %>
   <p>
-    <span style="margin-right: 8px" label="memo"><b><%= memo_number %>.</b></span>
-    <a href="/memos/<%= hattr(id) %>"><%= h(title_and_text['title']) %></a>
+    <span style="margin-right: 8px" label="memo"><b><%= index + 1 %>.</b></span>
+    <a href="/memos/<%= hattr(id) %>"><%= h(memo['title']) %></a>
   </p>
-  <% memo_number += 1 %>
 <% end %>
