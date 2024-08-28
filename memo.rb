@@ -49,6 +49,7 @@ end
 get '/memos/:id' do
   @id = params[:id]
   @memos = read_memos
+  @memo = @memos[@id]
 
   if @memos
     erb :detail
@@ -58,28 +59,41 @@ get '/memos/:id' do
 end
 
 delete '/memos/:id' do
-  memos = read_memos
+  memos = read_memos 
+  memo = memos[params[:id]]
 
-  memos.delete(params[:id])
-  write_memos(memos)
-
-  redirect '/memos'
+  if memo
+    memos.delete(params[:id]) 
+    write_memos(memos)
+    redirect '/memos'
+  else
+    erb :not_found
+  end
 end
 
 get '/memos/:id/edit' do
   @id = params[:id]
   @memos = read_memos
+  @memo = @memos[@id]
 
-  erb :edit
+  if @memo
+    erb :edit
+  else
+    erb :not_found
+  end
 end
 
 # メモの更新
 patch '/memos/:id' do
   id = params[:id]
   memos = read_memos
+  memo = memos[id]
 
-  memos[id].update('title' => params[:title], 'text' => params[:text])
-  write_memos(memos)
-
-  redirect '/memos'
+  if memo
+    memo.update('title' => params[:title], 'text' => params[:text])
+    write_memos(memos)
+    redirect '/memos'
+  else
+    erb :not_found
+  end
 end
