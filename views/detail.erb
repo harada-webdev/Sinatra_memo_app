@@ -1,14 +1,15 @@
 <h2>メモアプリ</h2>
 <p><a href="/memos">戻る</a></p>
+
 <p>
-  <span style="margin-right: 16px"><b>タイトル:</b></span>
+  <b>タイトル:</b><br>
   <%= h(@memos[@id]['title']) %>
 </p>
 
 <p>
-  <span style="margin-right: 48px"><b>メモ:</b></span>
-  <%= h(@memos[@id]['text']) %>
-</p>
+  <b>メモ:</b><br>
+  <span style="white-space: pre-wrap;"><%= h(@memos[@id]['text']) %></span>
+</p><br>
 
 <form method="get" action="/memos/<%= hattr(@id) %>/edit" style="display: inline-block; margin-right: 20px;">
   <button type="submit">変更</button>
