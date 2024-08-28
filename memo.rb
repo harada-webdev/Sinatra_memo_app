@@ -78,7 +78,7 @@ patch '/memos/:id' do
   id = params[:id]
   memos = read_memos
 
-  memos[id].update('title' => h(params[:title]), 'text' => h(params[:text]))
+  memos[id].update('title' => params[:title], 'text' => params[:text])
   write_memos(memos)
 
   redirect '/memos'
