@@ -32,7 +32,7 @@ get '/memos' do
   erb :home
 end
 
-get '/new' do
+get '/memos/new' do
   erb :new
 end
 
