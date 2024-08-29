@@ -48,8 +48,7 @@ end
 
 get '/memos/:id' do
   @id = params[:id]
-  @memos = read_memos
-  @memo = @memos[@id]
+  @memo = read_memos[@id]
 
   if @memo
     erb :detail
@@ -61,9 +60,8 @@ end
 delete '/memos/:id' do
   id = params[:id]
   memos = read_memos
-  memo = memos[id]
 
-  if memo
+  if memos[id]
     memos.delete(id)
     write_memos(memos)
     redirect '/memos'
@@ -74,8 +72,7 @@ end
 
 get '/memos/:id/edit' do
   @id = params[:id]
-  @memos = read_memos
-  @memo = @memos[@id]
+  @memo = read_memos[@id]
 
   if @memo
     erb :edit
@@ -86,9 +83,8 @@ end
 
 # メモの更新
 patch '/memos/:id' do
-  id = params[:id]
   memos = read_memos
-  memo = memos[id]
+  memo = memos[params[:id]]
 
   if memo
     memo.update('title' => params[:title], 'text' => params[:text])

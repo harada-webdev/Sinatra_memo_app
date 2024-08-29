@@ -3,12 +3,12 @@
 
 <p>
   <b>タイトル:</b><br>
-  <%= h(@memos[@id]['title']) %>
+  <%= h(@memo['title']) %>
 </p>
 
 <p>
   <b>メモ:</b><br>
-  <span style="white-space: pre-wrap;"><%= h(@memos[@id]['text']) %></span>
+  <span style="white-space: pre-wrap;"><%= h(@memo['text']) %></span>
 </p><br>
 
 <form method="get" action="/memos/<%= hattr(@id) %>/edit" style="display: inline-block; margin-right: 20px;">
