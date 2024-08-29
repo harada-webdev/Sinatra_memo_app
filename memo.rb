@@ -51,7 +51,7 @@ get '/memos/:id' do
   @memos = read_memos
   @memo = @memos[@id]
 
-  if @memos
+  if @memo
     erb :detail
   else
     erb :not_found
