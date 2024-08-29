@@ -59,11 +59,12 @@ get '/memos/:id' do
 end
 
 delete '/memos/:id' do
+  id = params[:id]
   memos = read_memos
-  memo = memos[params[:id]]
+  memo = memos[id]
 
   if memo
-    memos.delete(params[:id])
+    memos.delete(id)
     write_memos(memos)
     redirect '/memos'
   else
