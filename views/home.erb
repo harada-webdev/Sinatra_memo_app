@@ -1,0 +1,13 @@
+<div style="display: flex; align-items: baseline;">
+  <h2 style="margin-right: 50px;">メモアプリ</h2>
+  <form method="get" action="/memos/new">
+    <button type="submit">追加</button>
+  </form>
+</div>
+
+<% @memos.each_with_index do |(id, memo), index| %>
+  <p>
+    <span style="margin-right: 8px" label="memo"><b><%= index + 1 %>.</b></span>
+    <a href="/memos/<%= hattr(id) %>"><%= h(memo['title']) %></a>
+  </p>
+<% end %>

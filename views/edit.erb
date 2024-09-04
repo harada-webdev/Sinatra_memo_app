@@ -1,0 +1,17 @@
+<h2>メモアプリ</h2>
+
+<p><a href="/memos/<%= hattr(@id) %>">戻る</a></p>
+
+<form method="post" action="/memos/<%= @id %>">
+<input type="hidden" name="_method" value="patch">
+
+  <label for="title"><b>タイトル:</b></label><br>
+  <input name="title" id="title" value="<%= h(@memo['title']) %>"
+  style="width: 300px" required><br><br>
+
+  <label for="text"><b>メモ:</b></label><br>
+  <textarea name="text" rows="5" style="width: 300px" required><%= h(@memo['text']) %>
+  </textarea><br><br>
+
+  <button type="submit">変更</button>
+</form>
