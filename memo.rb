@@ -2,6 +2,12 @@
 
 require 'sinatra'
 require 'sinatra/reloader'
+require 'pg'
+require 'dotenv/load'
+
+def conn
+  @conn ||= PG.connect(dbname: ENV['DB_NAME'])
+end
 
 FILE_PATH = 'data/memo.json'
 
@@ -16,11 +22,21 @@ helpers do
 end
 
 def read_memos
-  JSON.parse(File.read(FILE_PATH))
+  conn.exec('SELECT * FROM memos').each_with_object({}) do |row, hash|
+    hash[row['id']] = { 'title' => row['title'], 'text' => row['text'] }
+  end
 end
 
-def write_memos(data)
-  File.write(FILE_PATH, JSON.dump(data))
+def add_memo(id, title, text)
+  conn.exec_params('INSERT INTO memos (id, title, text) VALUES ($1, $2, $3)', [id, title, text])
+end
+
+def delete_memo(id)
+  conn.exec_params('DELETE FROM memos WHERE id = $1', [id])
+end
+
+def update_memo(id, title, text)
+  conn.exec_params('UPDATE memos SET title = $1, text = $2 WHERE id = $3', [title, text, id])
 end
 
 get '/' do
@@ -29,6 +45,7 @@ end
 
 get '/memos' do
   @memos = read_memos
+
   erb :home
 end
 
@@ -38,10 +55,11 @@ end
 
 # メモの新規作成
 post '/memos' do
-  memos = read_memos
+  id = SecureRandom.uuid
+  title = params[:title]
+  text = params[:text]
 
-  memos[SecureRandom.uuid] = { 'title' => params[:title], 'text' => params[:text] }
-  write_memos(memos)
+  add_memo(id, title, text)
 
   redirect '/memos'
 end
@@ -59,11 +77,9 @@ end
 
 delete '/memos/:id' do
   id = params[:id]
-  memos = read_memos
 
-  if memos[id]
-    memos.delete(id)
-    write_memos(memos)
+  if read_memos[id]
+    delete_memo(id)
     redirect '/memos'
   else
     erb :not_found
@@ -83,12 +99,12 @@ end
 
 # メモの更新
 patch '/memos/:id' do
-  memos = read_memos
-  memo = memos[params[:id]]
+  id = params[:id]
+  title = params[:title]
+  text = params[:text]
 
-  if memo
-    memo.update('title' => params[:title], 'text' => params[:text])
-    write_memos(memos)
+  if read_memos[id]
+    update_memo(id, title, text)
     redirect '/memos'
   else
     erb :not_found

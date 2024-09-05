@@ -31,6 +31,7 @@ GEM
     concurrent-ruby (1.2.2)
     connection_pool (2.4.1)
     crass (1.0.6)
+    dotenv (3.1.2)
     drb (2.2.0)
       ruby2_keywords
     erb_lint (0.5.0)
@@ -59,6 +60,7 @@ GEM
     parser (3.2.2.4)
       ast (~> 2.4.1)
       racc
+    pg (1.5.7)
     racc (1.7.3)
     rack (2.2.8)
     rack-protection (3.1.0)
@@ -116,7 +118,9 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  dotenv
   erb_lint
+  pg
   rubocop-fjord
   sinatra
   sinatra-contrib
